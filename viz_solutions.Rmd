@@ -1,0 +1,87 @@
+---
+title: "viz answers"
+output: html_document
+date: "2023-03-03"
+---
+
+```{r glimpse-solution}
+glimpse(joined_new)
+```
+
+```{r annual_disasters-solution}
+annual_disasters <- joined_new %>% 
+  count(incidentType, year, name="total") 
+  
+annual_disasters
+```
+
+```{r fires-solution}
+annual_fires <- annual_disasters  %>% 
+  filter(incidentType=="Fire")
+
+annual_fires
+```
+
+
+```{r scented2-solution}
+ggplot(data=annual_fires) +
+  geom_col(aes(x=year, y=total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022)
+
+```
+
+```{r facet_example1-solution}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType))
+```
+
+
+
+```{r facet_example2-solution}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType), ncol=1)
+```
+
+
+```{r labels_example-solution}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType), ncol=1) +
+  labs(
+    title = "Disaster declarations since 2010",
+    x = "",
+    y = "Total",
+    caption= "Data: FEMA"
+  )
+```
+
+
+```{r themes_example2-solution}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType), ncol=1) +
+  labs(
+    title = "Disaster declarations since 2010",
+    x = "",
+    y = "Total",
+    caption= "Data: FEMA"
+  ) +
+  theme_bw() + 
+  theme(plot.title = element_text(face = "bold"),
+        panel.grid = element_blank(),
+        axis.title.y = element_text(face = "italic"))
+```

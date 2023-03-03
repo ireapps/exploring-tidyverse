@@ -1,0 +1,171 @@
+---
+title: "Visualizations notebook"
+output: html_notebook
+---
+
+
+```{r bobsog}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+burgers <- data.frame(employee=c("Bob", "Gene",
+                              "Linda", "Louise",
+                              "Tina"),
+                   time=c(25, 30, 60, 20, 50),
+                   age=c(42, 11, 39, 9, 13),
+                   interest=c("cooking", "music", "wine", "chaos", "horses"))
+
+burgers
+
+burgers <- burgers %>% 
+  mutate(where="front")
+
+burgers
+```
+
+
+```{r bobs, warning=F, message=F}
+ggplot(burgers, aes(x=where, y=time, fill=employee)) + 
+  geom_col(position="stack") 
+```
+
+```{r bobs1}
+ ggplot(burgers) + 
+    geom_point(aes(x=employee, y=time))
+```
+
+```{r bobs2}
+ ggplot(burgers) + 
+    geom_point(aes(x=employee, y=time, fill=employee)) 
+```
+
+```{r bobs3}
+ ggplot(burgers) + 
+    geom_point(aes(x=employee, y=time, fill=employee, color=employee)) 
+```
+
+```{r bobs4}
+ ggplot(burgers) + 
+    geom_point(aes(x=employee, y=time, fill=employee, color=employee, size=age)) 
+```
+
+```{r bobs5}
+  ggplot(burgers) + 
+    geom_col(aes(x=employee, y=time), stat="identity") 
+```
+
+
+```{r bobs6}
+  ggplot(burgers) + 
+    geom_col(aes(x=time, y=employee), stat="identity")
+```
+
+
+```{r bobs7}
+disney <- read_csv("data/disney_movies_total_gross.csv")
+
+glimpse(disney)
+```
+
+
+```{r disney}
+disney <- disney %>% 
+  mutate(release_date=mdy(release_date),
+         total_gross=parse_number(total_gross),
+         inflation_adjusted_gross=parse_number(inflation_adjusted_gross)) 
+
+glimpse(disney)
+```
+
+
+```{r disney3, warning=F, message=F}
+disney %>% 
+  ggplot(aes(x=release_date, 
+             y=inflation_adjusted_gross,
+             color=genre)) +
+  geom_point() 
+```
+
+```{r disney_scale}
+disney %>% 
+  ggplot(aes(x=release_date, 
+             y=inflation_adjusted_gross, 
+             color=genre)) +
+  geom_point() +
+  scale_x_date(limits=c(ymd("1980-01-01"), ymd("2020-01-01")))
+```
+
+```{r disney_scale_y}
+disney %>% 
+  ggplot(aes(x=release_date, 
+             y=inflation_adjusted_gross, 
+             color=genre)) +
+  geom_point() +
+  scale_x_date(limits=c(ymd("1980-01-01"), 
+                              ymd("2020-01-01"))) +
+  scale_y_continuous(limits=c(0, 1000000000)) 
+```
+
+```{r disney_dollars}
+disney %>% 
+  ggplot(aes(x=release_date, 
+             y=inflation_adjusted_gross, 
+             color=genre)) +
+  geom_point() +
+  scale_x_date(limits=c(ymd("1980-01-01"), 
+                              ymd("2020-01-01")),
+                     labels=scales::date_format("%Y")) +
+  scale_y_continuous(limits=c(0, 1000000000),
+                     labels=scales::dollar_format()) 
+```
+
+```{r disney_facets}
+disney %>% 
+  ggplot(aes(x=release_date, 
+             y=inflation_adjusted_gross)) +
+  geom_point() +
+  scale_x_date(limits=c(ymd("1980-01-01"), 
+                              ymd("2020-01-01")),
+                     labels=scales::date_format("%Y")) +
+  scale_y_continuous(limits=c(0, 1000000000),
+                     labels=scales::dollar_format()) +
+  facet_wrap(~genre)
+```
+
+```{r disney_labels}
+disney %>% 
+  ggplot(aes(x=release_date, 
+             y=inflation_adjusted_gross)) +
+  geom_point() +
+  scale_x_date(limits=c(ymd("1980-01-01"), 
+                              ymd("2020-01-01")),
+                     labels=scales::date_format("%Y")) +
+  scale_y_continuous(limits=c(0, 1000000000),
+                     labels=scales::dollar_format()) +
+  facet_wrap(~genre) +
+  labs(title="Disney animated movie gross profit") +
+  labs(subtitle="Adjusted for inflation") +
+  labs(y="", x="") +
+  labs(caption="Data: Source Goes Here")
+```
+
+```{r disney_themes}
+disney %>% 
+  ggplot(aes(x=release_date, 
+             y=inflation_adjusted_gross)) +
+  geom_point() +
+  scale_x_date(limits=c(ymd("1980-01-01"), 
+                              ymd("2020-01-01")),
+                     labels=scales::date_format("%Y")) +
+  scale_y_continuous(limits=c(0, 1000000000),
+                     labels=scales::dollar_format()) +
+  facet_wrap(~genre) +
+  labs(title="Disney animated movie gross profit") +
+  labs(subtitle="Adjusted for inflation") +
+  labs(y="", x="") +
+  labs(caption="Data: Source Goes Here") +
+  theme(strip.background = element_rect(colour = "black", fill = "white")) +
+  theme(legend.key = element_rect(fill = "white", colour = "black")) +
+  theme_minimal()
+```

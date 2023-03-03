@@ -1,0 +1,309 @@
+---
+title: "viz exercises"
+output: html_document
+date: "2023-03-03"
+---
+
+```{r setup, include=FALSE}
+packages <- c("tidyverse", "lubridate", "rvest", "httr", "remotes", "knitr")
+if (length(setdiff(packages, rownames(installed.packages()))) > 0) {
+  install.packages(setdiff(packages, rownames(installed.packages())), repos = "https://cran.us.r-project.org")  
+}
+
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(janitor)
+library(knitr)
+```
+
+## Data Introduction
+
+Before we begin, let's bring in the data we've been working with.
+
+```{r importing}
+df <- read_csv("https://www.fema.gov/api/open/v2/DisasterDeclarationsSummaries.csv")
+
+df_new <- df %>% 
+  mutate(GEOID=str_c(fipsStateCode, fipsCountyCode))
+
+county_pop <- read_csv("data/county_population.csv")
+
+joined_new <- left_join(df_new, county_pop, by="GEOID") %>% 
+  mutate(year=year(incidentBeginDate))
+```
+
+Let's take a look at what were working with. Check out `joined_new` with the usual function we use:
+
+```{r glimpse_exercise}
+
+```
+
+```{r glimpse-hint}
+# function starts with an *g*.
+```
+
+Okay, let's transform the data like we did before. 
+
+Can you count up how many **disasters** there have been **per year**? Not total disasters. Individual disasters.
+
+Call the new column "total".
+
+```{r annual_disasters_exercise}
+annual_disasters <- joined_new %>% 
+
+annual_disasters
+```
+
+```{r annual_disasters-hint}
+#You only need to add one new line. 
+#The function starts with a *c* and don't forget to name the column you're creating.
+# year should be the second argument in the function.
+```
+
+Alright, we've got a lot of data going back decades. 
+
+The benefit of working quickly with data in R is how you can quickly visualize it to spot any trends.
+
+Let's do that.
+
+But before we do, let's create another data frame specifically for fires.
+
+Filter incidentType for "Fire", please.
+
+```{r fires-exercise}
+annual_fires <- annual_disasters  %>% 
+
+annual_fires
+```
+
+```{r fires-hint}
+# The function starts with a *f* and don't forget ==
+```
+
+## Grammar of Graphics
+
+The grammar of graphics lets you approach visualizations structurally, letting you combine and swap out graphical elements into figures that display data meaningfully.
+
+It takes two lines of code.
+
+This is what the code and chart looks like.
+
+Run the code below.
+
+```{r first_chart}
+ggplot(data=annual_fires) +
+  geom_col(aes(x=year, y=total)) 
+```
+
+Here's the dataframe called `annual_fires` as a reminder:
+
+```{r preview}
+annual_fires %>% slice(1:5)
+```
+
+Try `geom_point()` and then `geom_line()` in the code below
+
+```{r first_chart_geoms_exercise}
+ggplot(data=annual_fires) +
+  geom______(aes(x=year, y=total)) 
+```
+
+You can really start to see the power of cycling quickly through different chart styles to see which one is most effective at telling the story you want to tell.
+
+So after you have the very basic elements needed to create a chart, you can build and style it with more layers.
+
+Because the defaults are rarely what you want and effective dataviz comes from small decisions you make along the way.
+
+### Additional layers
+
+There are many of other grammatical layers we can use to describe graphs.
+
+We sequentially add layers onto the foundational `ggplot()` plot to create complex figures.
+
+
+```{r img4a, echo = F, out.width="50%", fig.align="center"}
+include_graphics("slides/images/ggplot4a.png")
+``` 
+
+Scales change the properties of the variable mapping.
+
+
+### Exercise 2
+
+Now add `scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022)` to the bottom of the code.
+
+
+```{r scented2, warning=F, message=F}
+ggplot(data=annual_fires) +
+  geom_col(aes(x=year, y=total)) +
+
+# Add line above this one
+```
+
+Do you see the difference at the bottom of the chart compared to the one above it?
+
+It limited the scope of the x-axis so it didn't go back to the '50s anymore.
+
+And it specifically labeled the years 2010 through 2022.
+
+## Facets
+
+The next possible layer allows for small multiples. It's really neat.
+
+Facets show subplots for different subsets of data.
+
+The table above shows all the different ways you can use facets-- you can break it out by one extra variable or even two.
+
+We'll use the annual disasters this time so we have more than just the fires.
+
+But we'll filter it to hurricanes and fires and floods.
+
+And we can combine it with pipes before we use **ggplot()** it.
+
+Add the `facet_wrap()` line on the variable **incidentType** (like the first example in the table above).
+
+```{r facet_example_exercise}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  ______________________________
+```
+
+```{r facet_example1-hint}
+function starts with an *f*.
+```
+
+Alright, looks like the x-axis labels are getting a little crowded.
+
+We can't even read it!
+
+### Try again!
+
+Now, try it with `ncol=1` as an additional argument in `facet_wrap()`
+
+```{r facet_example2}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType)_______)
+```
+
+```{r facet_example2-hint}
+function starts with an *f*.
+Additional arguments in a function are separated with a comma.
+```
+
+## Labels
+
+Now we can add more customization to the chart.
+
+* Title should be "Disaster declarations since 2010"
+* Label for the x-axis should be blank (aka "") because the years are obvious
+* Label for the y-axis should be "Total"
+* Caption should be "Data: FEMA"
+
+Add those labels below:
+
+```{r labels_example_exercise}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType), ncol=1) +
+  labs(
+    
+    
+    
+    
+  )
+```
+
+```{r labels_example-hint}
+You only need to call labs() once.
+Within parentheses, just separate the arguments with commas. You don't use the plus signs.
+```
+
+
+## Themes
+
+Change the appearance of anything in the plot.
+
+While you can customize every font, color, gradient, etc, you can set these styles up ahead of time or use the ones others have created.
+
+There are many built-in themes.
+
+* theme_grey()
+* theme_bw()
+* theme_minimal()
+* theme_dark()
+
+Try out the different themes listed above in the code below.
+
+```{r themes-example-exercise}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType), ncol=1) +
+  labs(
+    title = "Disaster declarations since 2010",
+    x = "",
+    y = "Total",
+    caption= "Data: FEMA"
+  ) +
+  theme______()
+```
+
+### More themes
+
+There are a collections of pre-built themes online, like the [ggthemes package](https://jrnold.github.io/ggthemes/).
+
+Organizations often make their own custom themes, like [the BBC](https://bbc.github.io/rcookbook/).
+
+### Theme adjustments
+
+Make theme adjustments with `theme()`
+
+There are a billion options here!
+
+Add this chunk of code in the exercise below it:
+
+```{r eval=F}
+theme_bw() + 
+theme(plot.title = element_text(face = "bold"),
+      panel.grid = element_blank(),
+      axis.title.y = element_text(face = "italic"))
+```
+
+### Exercise 5
+
+```{r themes_example2-exercise}
+annual_disasters %>% 
+  filter(incidentType %in% c("Hurricane", "Fire", "Flood")) %>% 
+ggplot() +
+  geom_col(mapping=aes(x= year, y= total)) +
+  scale_x_continuous(limits=c(2010, 2022), breaks=2010:2022) +
+  facet_wrap(vars(incidentType), ncol=1) +
+  labs(
+    title = "Disaster declarations since 2010",
+    x = "",
+    y = "Total",
+    caption= "Data: FEMA"
+  ) +
+
+# copy and paste the chunk of code above this chunk into the line above this one
+```
+
+These were just a few examples of layers.
+
+
+See the [ggplot2 documentation](https://ggplot2.tidyverse.org/reference/index.html) for complete examples of everything you can do
+
+### Done!
