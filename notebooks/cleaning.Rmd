@@ -14,12 +14,12 @@ Load your data. We'll use three different files with different cleaning / reshap
 
 -   Load disney_movies_total_gross.csv into a variable called `disney`
 -   Load ohsa.csv into a variable called `osha`
--   Load poverty.csv into a variable called `poverty`
+-   Load poverty_original.csv into a variable called `poverty`
 
 ```{r}
 disney <- read_csv("data/disney_movies_total_gross.csv")
 osha <- read_csv("data/osha.csv")
-poverty <- read_csv("data/poverty.csv")
+poverty <- read_csv("data/poverty_original.csv")
 ```
 
 Start with the `disney` file.
@@ -54,17 +54,16 @@ Now to the numbers columns: `total_gross` and `inflation_adjusted_gross`. There'
 disney %>% mutate(new_total_gross = parse_number(total_gross)) %>% select(total_gross, new_total_gross)
 ```
 
-Great. Now let's create two new columns:
-
+👉YOUR TURN
+Write some code to create two new columns to convert both `total_gross` and `inflation_adjusted_gross`:
 ```{r}
-disney <- disney %>% mutate(new_total_gross = parse_number(total_gross), 
-                            new_adjusted_gross = parse_number(inflation_adjusted_gross))
+
 ```
 
+👉YOUR TURN
 Now you you can ask, in inflation-adjusted dollars, which disney movie is the highest-grossing movie of all time?
-
 ```{r}
-disney %>% arrange(desc(new_adjusted_gross))
+
 ```
 
 ### Adding description columns
@@ -101,7 +100,7 @@ osha <- osha %>% mutate(estab_type_desc = case_when(
 
 ### Working with strings
 
-For this exercise, we'll use `poverty`, which is the original file that I got from the Census Bureau. I cleaned it up using several techniques that I'll share here.
+For this exercise, we'll use `poverty_original`, which is the original file that I got from the Census Bureau. I cleaned it up using several techniques that I'll share here.
 
 ```{r}
 glimpse(poverty)

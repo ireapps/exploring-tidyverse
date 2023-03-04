@@ -7,24 +7,28 @@ If you're familiar with spreadsheets and/or SQL, you'll recognize these function
 
 ```{r}
 library(tidyverse)
+library(readxl)
 ```
 
 The main functions of the tidyverse that we're going to cover are these:
 
--   select()
 -   filter()
+-   distinct()
 -   arrange()
 -   group_by()
 -   summarise()
 -   count()
+-   select()
 -   left_join() (and some other joins)
 
 We'll put these functions into practice using the poverty data and salaries data; later we'll use campaign finance data to practice joins:
 
 ```{r}
-poverty <- read_csv("data/poverty.csv")
-salaries <- read_excel("data/salaries.xlsx", sheet=1)
-
+# complete these lines to import poverty.csv, salaries.xlsx, and osha.csv from your data folder: 
+poverty <- 
+salaries <- 
+osha <- 
+  
 # FEC campaign finance
 # Note we're forcing data types on these tables: 
 transactions <- read_csv("data/transactions.csv", col_types="ccccccccccccccTnccccccc")
@@ -34,20 +38,6 @@ candidates <- read_csv("data/candidates.csv", col_types = cols(.default = "c"))
 Our goal here is to explore each of the functions mentioned above so you get a sense for what each does. We'll cover the basics but there's always more to learn.
 
 An important note: the tidyverse works with a *pipe* which is this character `%>%`. It does what it sounds like: it sends the results of one function into the next. When asking questions of data, start with the variable name that holds your dataset and pipe it into the function(s) that help you answer your question.
-
-### select()
-
-Use `select()` to choose only particular columns from your data table, or to exclude columns in your results:
-
-```{r}
-poverty %>% select(state, county, population, below150)
-```
-
-Use the negative sign to exclude columns:
-
-```{r}
-poverty %>% select(-below50, -below125)
-```
 
 ### filter()
 
@@ -65,12 +55,21 @@ You can specify multiple criteria in your filter, separated by `&` (AND) or `|` 
 poverty %>% filter(state=="California" & population > 1000000)
 ```
 
+👉 YOUR TURN
+Locate your state and county in this data: how many people live below 200% of the poverty level?
+```{r}
+
+```
+
+Look at a tri-state area using OR, two ways: 
 ```{r}
 poverty %>% filter(state=="California" | state=="Oregon" | state=="Washington")
 # or...
 poverty %>% filter(state %in% c("California", "Oregon", "Washington"))
+```
 
-# to exclude those same states, use ! in front of the phrase: 
+To exclude those same states, use ! in front of the phrase: 
+```{r}
 poverty %>% filter(!state %in% c("California", "Oregon", "Washington"))
 ```
 
@@ -79,27 +78,46 @@ Instead of matching exact values in filter with `==` you can use `grepl()` to lo
 Remember that R is case sensitive, and that's true here as well. But `grepl()` comes with an argument that ignores case:
 
 ```{r}
-osha %>% filter(grepl("fish",industry_description, ignore.case=T)) %>% 
-  count(industry_description)
+osha %>% filter(grepl("fish",industry_description, ignore.case=T))
+```
+
+👉 YOUR TURN
+Find all the records for businesses where the industry is related to farming: 
+```{r}
+
 ```
 
 The `grepl()` function is in a family of `grep` functions that allow you to search for strings (as above) or patters. In order to search for patterns you need to learn "regular expressions", which is a whole other class. But you can use `grep()` and `grepl()` to search for keywords in a text column. `grepl()` returns TRUE or FALSE depending on whether the text matches, and `grep()` returns an index of the values that match:
 
 ```{r}
 ?grep
-```
 
-```{r}
 a <- c("cod fishing", "salmon fishing", "fish hatcheries", "salmon hatcheries")
-```
 
-```{r}
 grep("fish", a)
 grepl("fish",a)
 
 grepl("^fish", a) #starts with fish
 grepl("fishing$", a) #ends with fishing
-grepl()
+grepl("fish|hatch",a) #searches for "fish" or "hatch"
+```
+
+### select()
+
+Use `select()` to choose only particular columns from your data table, or to exclude columns in your results:
+
+```{r}
+osha %>% 
+  filter(grepl("fish",industry_description, ignore.case=T)) %>% 
+  select(establishment_name, industry_description)
+```
+
+Use the negative sign to exclude columns. In this case, exclude all columns that start with "total":
+
+```{r}
+osha %>% 
+  filter(grepl("fish",industry_description, ignore.case=T)) %>% 
+  select(-starts_with("total"))
 ```
 
 ### arrange()
@@ -107,52 +125,62 @@ grepl()
 Use `arrange()` to sort your data.
 
 ```{r}
-poverty %>% arrange(population)
+osha %>% arrange(no_injuries_illnesses)
 ```
 
 The default is ascending, so to switch to descending, use the function `desc()` like this:
 
 ```{r}
-poverty %>% arrange(desc(population))
+osha %>% arrange(desc(no_injuries_illnesses))
 ```
 
 You can do a multi-level sort:
 
 ```{r}
-poverty %>% arrange(state, desc(population))
+osha %>% arrange(state, desc(no_injuries_illnesses))
+```
+
+👉 YOUR TURN
+Find the establishment in your state with the most deaths: 
+```{r}
+
 ```
 
 ### summarise()
 
 Use `summarise()` to apply summary functions to a column in your data. `summarise()` will reduce a bunch of data to one number (a summary). You can do summarise an entire column or summarise groups by using the `group_by()` function (we'll talk about that next). Note that since the tidyverse was primarily written by a New Zealander you'll often see summarise spelled with an s, but you can also spell it with a z.
 
-To sum up the population using the tidyverse convention of piping, you need to put the `sum()` function inside the `summarise()` function:
+To sum up the population using the tidyverse using the `sum()` function, use the `$` to pull out that particular column: 
+```{r}
+sum(poverty$population)
+```
+
+But if you want to use tidyverse functions and the convention of piping, you need to put the `sum()` function inside the `summarise()` function:
 
 ```{r}
 poverty %>% summarise(total_pop = sum(population))
 ```
 
-Try stringing functions together using the `%>%`:
-
+👉YOUR TURN
+Sum up the population that is below 200% of the poverty level: 
 ```{r}
-poverty %>% filter(state=="California") %>% summarise(total_pop = sum(population))
+
 ```
 
 Within `summarise()` you can apply any number of summary functions. Here's a few: `mean()`, `median()`, `min()`, `max()`, `range()`, `n()`
 
-What is the average population of counties in the US?
-
+What is the average population of counties in the US? Remember: one row is one county, so an average of the whole dataset represents the average of all counties. 
 ```{r}
 poverty %>% summarise(avg_pop = mean(population))
 ```
 
-What about just for California (or pick another state and swap out the name in the filter):
-
+👉 YOUR TURN
+What is the total population for your state? 
 ```{r}
-poverty %>% filter(state=="California") %>% summarise(avg_pop = mean(population))
+
 ```
 
-How many counties are in California?
+The `n()` function counts rows or observations. One row in the poverty data is one county, so to see how many counties are in a state (such as California), use `n()`.
 
 ```{r}
 poverty %>% filter(state=="California") %>% summarise(counties = n())
@@ -181,24 +209,26 @@ poverty %>%
 
 Note: because you named the result of sum(population) "total_pop", you can feed that into the `arrange()` function.
 
-Now we'll take a look at the `salaries` data.
+Take a look at the `salaries` dataset. 
 
-The `count()` function is a great tool for integrity checks. Use it to look for misspellings and inconsistencies (and also to see which values are most common). This function basically gives you the frequency of each value in a column:
-
+👉YOUR TURN
+What is the total amount paid out? (Hint: use total_comp)
 ```{r}
-salaries %>% count(department)
+
 ```
 
-`count()` is basically a combination of `group_by()` and `summarise(n())`. The following two lines of code produce exactly the same results:
-
+👉YOUR TURN 
+Which department pays out the most? 
 ```{r}
-salaries %>% count(job_title)
-salaries %>% group_by(job_title) %>% summarise(n = n())
+
 ```
 
 What is the total overtime paid out by the city in 2021? Notice that there NAs in overtime. If you don't exclude them, R will just return an NA on any summary function you run. Use the `na.rm=TRUE` argument to exclude NAs. You can also write `na.rm=T`:
 
 ```{r}
+salaries %>% summarise(overtime = sum(overtime_oncall))
+# notice that the result is NA
+
 salaries %>% summarise(overtime = sum(overtime_oncall, na.rm=TRUE))
 ```
 
@@ -211,16 +241,7 @@ salaries %>%
   arrange(desc(overtime))
 ```
 
-Which Senior Police Officers get the most overtime?
-
-```{r}
-salaries %>% 
-  filter(job_title=="Senior Police Officer") %>% 
-  arrange(desc(overtime_oncall))
-```
-
 Which job title received the most in overtime pay?
-
 ```{r}
 salaries %>% 
   group_by(job_title) %>% 
@@ -228,13 +249,25 @@ salaries %>%
   arrange(desc(OT))
 ```
 
+👉YOUR TURN 
 Which departments pay out the most in overtime?
+```{r}
+
+```
+
+### count()
+
+The `count()` function is a great tool for integrity checks. Use it to look for misspellings and inconsistencies (and also to see which values are most common). This function basically gives you the frequency of each value in a column:
 
 ```{r}
-salaries %>% 
-  group_by(department) %>% 
-  summarise(ot = sum(overtime_oncall, na.rm=T)) %>% 
-  arrange(desc(ot))
+salaries %>% count(department)
+```
+
+`count()` is basically a combination of `group_by()` and `summarise(n())`. The following two lines of code produce exactly the same results:
+
+```{r}
+salaries %>% count(job_title)
+salaries %>% group_by(job_title) %>% summarise(n = n())
 ```
 
 ### joins
@@ -255,16 +288,38 @@ There are several different kinds of joins in R that determine what you'll see i
 
 If you know SQL some of these will look familiar. To specify which columns to join on, use `by = `. If the shared columns have the same name, for example `id`, use `by = "id"`. If the columns have different names, such as `a_id` and `b_id`, use `by = c("id" = "id2")`. If you need to join on more than one column, `by=c("id" = "id2", "name" = "name2")`.
 
+Several joins are useful for the campaign finance data we loaded: 
+
 `inner_join()` returns only matches and all the columns from both tables: 
 ```{r}
 inner_join(transactions, candidates, by = "cand_id")
+# notice the number of results match the rows in the transactions table: everything matched. 
 ```
+
 
 `left_join()` returns all the rows from your main table (or left table) and only matches from your lookup table. It also returns columns from both tables.
 ```{r}
 left_join(transactions, candidates, by = "cand_id")
+# because everything matches, this returns the same results as the inner_join(). 
 ```
 
-`right_join()` is just `left_join()` in reverse. I never use it.
+`semi_join()` is useful for checking for matches without returning the columns from both tables. 
+In this case, we could see information on which candidates are in our dataset: 
+```{r}
+semi_join(candidates, transactions, by = "cand_id")
+# there are 20 candidates in our dataset. Looking over their info, you can see they are all Missouri candidates. 
+```
 
+`anti_join()` is useful for looking at the opposite: are there any records that don't have a match? Use it here to see if there are any transactions where the cand_id doesn't have a match in `candidates`: 
+```{r}
+anti_join(transactions, candidates, by = "cand_id") %>% 
+  select(cand_id)
+# there are eight transactions, all with the same cand_id that don't have a match in `candidates`. 
+```
+
+👉YOUR TURN
+Join `transactions` and `candidates` and find out which committee spent the most money: 
+```{r}
+
+```
 
