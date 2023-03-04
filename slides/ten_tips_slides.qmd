@@ -1,0 +1,17 @@
+---
+title: "Ten tricks in the tidyverse"
+format: revealjs
+editor: visual
+---
+
+## Counting and summarizing
+
+1. `count()`
+
+2. Creating variables in `count()`
+
+3. `add_count()`
+
+4. `summarize()` w/ a list count
+
+
