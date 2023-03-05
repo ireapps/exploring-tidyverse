@@ -12,27 +12,27 @@ library(readxl)
 
 ## Counting and summarizing
 
-1. `count()`
+1.  `count()`
 
-2. Creating variables in `count()`
+2.  Creating variables in `count()`
 
-3. `add_count()`
+3.  `add_count()`
 
-## Wrangling data 
+## Wrangling data
 
-4. `str_pad()`
+4.  `str_pad()`
 
-5. `replace_na()`
+5.  `replace_na()`
 
-6. `lag()`
+6.  `lag()`
 
 ## tidy data
 
-7. `crossing()`
+7.  `crossing()`
 
-8. `separate()`
+8.  `separate()`
 
-9. **collapse**
+9.  **collapse**
 
 10. **tidylog**
 
@@ -40,10 +40,9 @@ So much of data science is counting, and sometimes dividing
 
 # 1. `count()`
 
-## Regular summarizing 
+## Regular summarizing
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="60%"}
 ```{r mlb, echo=T}
 mlb <- read_csv("data/mlb.csv")
@@ -58,13 +57,11 @@ mlb %>%
   summarize(total=n())
 ```
 :::
-
-::::
+:::
 
 ## Using count()
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="60%"}
 ```{r mlb2, echo=T}
 mlb <- read_csv("data/mlb.csv")
@@ -78,13 +75,11 @@ mlb %>%
   count(team)
 ```
 :::
-
-::::
+:::
 
 ## Using count() and names
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="60%"}
 ```{r mlb3, echo=T}
 mlb <- read_csv("data/mlb.csv")
@@ -99,14 +94,11 @@ mlb %>%
         name="total")
 ```
 :::
-
-::::
-
+:::
 
 ## Using count() and more
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="50%"}
 ```{r mlb4, echo=T}
 mlb <- read_csv("data/mlb.csv")
@@ -123,8 +115,7 @@ mlb %>%
         name="total_salary")
 ```
 :::
-
-::::
+:::
 
 # 2. Creating new variables in a `group_by()` or `count()`
 
@@ -144,7 +135,6 @@ disney %>%
   count(year)
 ```
 
-
 ## count() again but better
 
 ```{r, echo=T}
@@ -162,6 +152,7 @@ disney %>%
   ggplot(aes(x=year, y=n)) +
   geom_col() 
 ```
+
 ## excellent for quicker viz
 
 ```{r, echo=T}
@@ -171,7 +162,6 @@ disney %>%
   ggplot(aes(x=decade, y=n)) +
   geom_col() 
 ```
-
 
 # 3.add_count()
 
@@ -209,7 +199,7 @@ osha %>%
   filter(total>100)
 ```
 
-## add_count() 
+## add_count()
 
 ```{r echo=T}
 osha %>% 
@@ -219,7 +209,7 @@ osha %>%
   filter(n>100)
 ```
 
-## add_count() 
+## add_count()
 
 ```{r echo=T}
 osha %>% 
@@ -239,7 +229,8 @@ poverty <- read_csv("data/poverty_original.csv") %>%
 
 glimpse(poverty)
 ```
-## str_pad() 
+
+## str_pad()
 
 ```{r echo=T}
 poverty <- read_csv("data/poverty_original.csv") %>% 
@@ -248,6 +239,7 @@ poverty <- read_csv("data/poverty_original.csv") %>%
 
 glimpse(poverty)
 ```
+
 # 5. replace_na()
 
 ## replace_na()
@@ -402,4 +394,3 @@ inner_join(transactions, candidates, by = "cand_id")
 ```{r echo=T}
 left_join(transactions, candidates, by = "cand_id")
 ```
-

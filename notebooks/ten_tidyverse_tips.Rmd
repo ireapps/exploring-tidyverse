@@ -65,6 +65,13 @@ glimpse(mlb)
 
 ```{r, echo=T}
 mlb %>% 
+  count(team, league)
+
+saved <- mlb %>% 
+  select(team, league) %>% 
+  unique()
+
+saved_count <- saved %>% 
   count(team)
 ```
 
@@ -119,7 +126,9 @@ glimpse(disney)
 ```{r, echo=T}
 disney %>% 
   mutate(year=year(mdy(release_date))) %>% 
-  count(year)
+  mutate(month=month(mdy(release_date))) %>% 
+  count(year, month) %>% 
+  arrange(month, year)
 ```
 
 
