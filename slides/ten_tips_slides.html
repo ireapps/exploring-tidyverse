@@ -9,7 +9,7 @@
 <link href="ten_tips_slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.1.251">
 
-  <title>Ten tricks in the tidyverse</title>
+  <title>Tidyverse functions that make wrangling data easier</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -27,6 +27,70 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="ten_tips_slides_files/libs/revealjs/dist/theme/quarto.css" id="theme">
   <link href="ten_tips_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -323,21 +387,973 @@
     <div class="slides">
 
 <section id="title-slide" class="center">
-  <h1 class="title">Ten tricks in the tidyverse</h1>
+  <h1 class="title">Tidyverse functions that make wrangling data easier</h1>
 </section>
 
+<section class="slide level2">
+
+<div class="cell">
+
+</div>
+</section>
 <section id="counting-and-summarizing" class="slide level2">
 <h2>Counting and summarizing</h2>
 <ol type="1">
 <li><p><code>count()</code></p></li>
 <li><p>Creating variables in <code>count()</code></p></li>
 <li><p><code>add_count()</code></p></li>
-<li><p><code>summarize()</code> w/ a list count</p></li>
 </ol>
+</section>
+<section id="wrangling-data" class="slide level2">
+<h2>Wrangling data</h2>
+<ol start="4" type="1">
+<li><p><code>str_pad()</code></p></li>
+<li><p><code>replace_na()</code></p></li>
+<li><p><code>lag()</code></p></li>
+</ol>
+</section>
+<section id="tidy-data" class="slide level2">
+<h2>tidy data</h2>
+<ol start="7" type="1">
+<li><p><code>crossing()</code></p></li>
+<li><p><code>separate()</code></p></li>
+<li><p><strong>collapse</strong></p></li>
+<li><p><strong>tidylog</strong></p></li>
+</ol>
+<p>So much of data science is counting, and sometimes dividing</p>
+</section>
+<section>
+<section id="count" class="title-slide slide level1 center">
+<h1>1. <code>count()</code></h1>
+
+</section>
+<section id="regular-summarizing" class="slide level2">
+<h2>Regular summarizing</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>mlb <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mlb.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">glimpse</span>(mlb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 898
+Columns: 5
+$ player   &lt;chr&gt; "Ahmed, Nick", "Bumgarner, Madison", "Cabrera, Asdrubal", "Ca…
+$ team     &lt;chr&gt; "Arizona Diamondbacks", "Arizona Diamondbacks", "Arizona Diam…
+$ league   &lt;chr&gt; "NL-West", "NL-West", "NL-West", "NL-West", "NL-West", "NL-We…
+$ position &lt;chr&gt; "SS", "SP", "2B", "OF", "SP", "RP", "RP", "RP", "3B", "SP", "…
+$ salary   &lt;dbl&gt; 8125000, 17882892, 1750000, 8000000, 601800, 1750000, 596400,…</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>mlb <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">group_by</span>(team) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">summarize</span>(<span class="at">total=</span><span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 2
+   team                 total
+   &lt;chr&gt;                &lt;int&gt;
+ 1 Arizona Diamondbacks    29
+ 2 Atlanta Braves          28
+ 3 Baltimore Orioles       30
+ 4 Boston Red Sox          29
+ 5 Chicago Cubs            29
+ 6 Chicago White Sox       29
+ 7 Cincinnati Reds         29
+ 8 Cleveland Guardians     27
+ 9 Colorado Rockies        30
+10 Detroit Tigers          28
+# … with 20 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-count" class="slide level2">
+<h2>Using count()</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>mlb <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mlb.csv"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">glimpse</span>(mlb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 898
+Columns: 5
+$ player   &lt;chr&gt; "Ahmed, Nick", "Bumgarner, Madison", "Cabrera, Asdrubal", "Ca…
+$ team     &lt;chr&gt; "Arizona Diamondbacks", "Arizona Diamondbacks", "Arizona Diam…
+$ league   &lt;chr&gt; "NL-West", "NL-West", "NL-West", "NL-West", "NL-West", "NL-We…
+$ position &lt;chr&gt; "SS", "SP", "2B", "OF", "SP", "RP", "RP", "RP", "3B", "SP", "…
+$ salary   &lt;dbl&gt; 8125000, 17882892, 1750000, 8000000, 601800, 1750000, 596400,…</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>mlb <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">count</span>(team)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 2
+   team                     n
+   &lt;chr&gt;                &lt;int&gt;
+ 1 Arizona Diamondbacks    29
+ 2 Atlanta Braves          28
+ 3 Baltimore Orioles       30
+ 4 Boston Red Sox          29
+ 5 Chicago Cubs            29
+ 6 Chicago White Sox       29
+ 7 Cincinnati Reds         29
+ 8 Cleveland Guardians     27
+ 9 Colorado Rockies        30
+10 Detroit Tigers          28
+# … with 20 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-count-and-names" class="slide level2">
+<h2>Using count() and names</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>mlb <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mlb.csv"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">glimpse</span>(mlb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 898
+Columns: 5
+$ player   &lt;chr&gt; "Ahmed, Nick", "Bumgarner, Madison", "Cabrera, Asdrubal", "Ca…
+$ team     &lt;chr&gt; "Arizona Diamondbacks", "Arizona Diamondbacks", "Arizona Diam…
+$ league   &lt;chr&gt; "NL-West", "NL-West", "NL-West", "NL-West", "NL-West", "NL-We…
+$ position &lt;chr&gt; "SS", "SP", "2B", "OF", "SP", "RP", "RP", "RP", "3B", "SP", "…
+$ salary   &lt;dbl&gt; 8125000, 17882892, 1750000, 8000000, 601800, 1750000, 596400,…</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>mlb <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">count</span>(team, </span>
+<span id="cb11-3"><a href="#cb11-3"></a>        <span class="at">name=</span><span class="st">"total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 2
+   team                 total
+   &lt;chr&gt;                &lt;int&gt;
+ 1 Arizona Diamondbacks    29
+ 2 Atlanta Braves          28
+ 3 Baltimore Orioles       30
+ 4 Boston Red Sox          29
+ 5 Chicago Cubs            29
+ 6 Chicago White Sox       29
+ 7 Cincinnati Reds         29
+ 8 Cleveland Guardians     27
+ 9 Colorado Rockies        30
+10 Detroit Tigers          28
+# … with 20 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-count-and-more" class="slide level2">
+<h2>Using count() and more</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>mlb <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/mlb.csv"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">glimpse</span>(mlb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 898
+Columns: 5
+$ player   &lt;chr&gt; "Ahmed, Nick", "Bumgarner, Madison", "Cabrera, Asdrubal", "Ca…
+$ team     &lt;chr&gt; "Arizona Diamondbacks", "Arizona Diamondbacks", "Arizona Diam…
+$ league   &lt;chr&gt; "NL-West", "NL-West", "NL-West", "NL-West", "NL-West", "NL-We…
+$ position &lt;chr&gt; "SS", "SP", "2B", "OF", "SP", "RP", "RP", "RP", "3B", "SP", "…
+$ salary   &lt;dbl&gt; 8125000, 17882892, 1750000, 8000000, 601800, 1750000, 596400,…</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>mlb <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">count</span>(team, </span>
+<span id="cb15-3"><a href="#cb15-3"></a>        <span class="at">sort=</span><span class="cn">TRUE</span>,</span>
+<span id="cb15-4"><a href="#cb15-4"></a>        <span class="at">wt=</span>salary,</span>
+<span id="cb15-5"><a href="#cb15-5"></a>        <span class="at">name=</span><span class="st">"total_salary"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 2
+   team                  total_salary
+   &lt;chr&gt;                        &lt;dbl&gt;
+ 1 Los Angeles Dodgers      250025736
+ 2 New York Mets            209915869
+ 3 Los Angeles Angels       200909176
+ 4 New York Yankees         195900264
+ 5 Houston Astros           186399250
+ 6 Washington Nationals     181276812
+ 7 San Diego Padres         177004886
+ 8 Philadelphia Phillies    173090832
+ 9 St. Louis Cardinals      163222000
+10 Boston Red Sox           149743574
+# … with 20 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="creating-new-variables-in-a-group_by-or-count" class="title-slide slide level1 center">
+<h1>2. Creating new variables in a <code>group_by()</code> or <code>count()</code></h1>
+
+</section>
+<section id="bring-in-disney-data" class="slide level2">
+<h2>Bring in Disney data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>disney <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/disney_movies_total_gross.csv"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">glimpse</span>(disney)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 579
+Columns: 6
+$ movie_title              &lt;chr&gt; "Snow White and the Seven Dwarfs", "Pinocchio…
+$ release_date             &lt;chr&gt; "Dec 21, 1937", "Feb 9, 1940", "Nov 13, 1940"…
+$ genre                    &lt;chr&gt; "Musical", "Adventure", "Musical", "Adventure…
+$ MPAA_rating              &lt;chr&gt; "G", "G", "G", "G", "G", NA, "G", NA, "G", NA…
+$ total_gross              &lt;chr&gt; "$184,925,485", "$84,300,000", "$83,320,000",…
+$ inflation_adjusted_gross &lt;chr&gt; "$5,228,953,251", "$2,188,229,052", "$2,187,0…</code></pre>
+</div>
+</div>
+</section>
+<section id="count-again" class="slide level2">
+<h2>count() again</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>disney <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">year</span>(<span class="fu">mdy</span>(release_date))) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">count</span>(year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 54 × 2
+    year     n
+   &lt;dbl&gt; &lt;int&gt;
+ 1  1937     1
+ 2  1940     2
+ 3  1946     1
+ 4  1950     1
+ 5  1954     1
+ 6  1955     1
+ 7  1959     1
+ 8  1961     3
+ 9  1962     1
+10  1963     1
+# … with 44 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="count-again-but-better" class="slide level2">
+<h2>count() again but better</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>disney <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">year</span>(<span class="fu">mdy</span>(release_date))) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="fu">count</span>(<span class="at">decade =</span> <span class="dv">10</span> <span class="sc">*</span> (year <span class="sc">%/%</span> <span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+  decade     n
+   &lt;dbl&gt; &lt;int&gt;
+1   1930     1
+2   1940     3
+3   1950     4
+4   1960     7
+5   1970     9
+6   1980    61
+7   1990   236
+8   2000   172
+9   2010    86</code></pre>
+</div>
+</div>
+</section>
+<section id="excellent-for-quicker-viz" class="slide level2">
+<h2>excellent for quicker viz</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>disney <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">year</span>(<span class="fu">mdy</span>(release_date))) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">count</span>(year) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-4"><a href="#cb23-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>n)) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>  <span class="fu">geom_col</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="ten_tips_slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
+<section id="excellent-for-quicker-viz-1" class="slide level2">
+<h2>excellent for quicker viz</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>disney <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">year</span>(<span class="fu">mdy</span>(release_date))) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">count</span>(<span class="at">decade =</span> <span class="dv">10</span> <span class="sc">*</span> (year <span class="sc">%/%</span> <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>decade, <span class="at">y=</span>n)) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="fu">geom_col</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="ten_tips_slides_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="add_count" class="title-slide slide level1 center">
+<h1>3.add_count()</h1>
+
+</section>
+<section id="add_count-1" class="slide level2">
+<h2>add_count()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>osha <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/osha.csv"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2"></a></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="fu">glimpse</span>(osha)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 84,555
+Columns: 31
+$ id                           &lt;dbl&gt; 1426066, 1426069, 1426098, 1426099, 14261…
+$ company_name                 &lt;chr&gt; "Weir", "Procter &amp; Gamble Manufacturing",…
+$ establishment_name           &lt;chr&gt; "Weir Minerals", "Procter &amp; Gamble Manufa…
+$ ein                          &lt;chr&gt; "391147488", "310411982", "520636385", "5…
+$ street_address               &lt;chr&gt; "2701 S. Stoughton Rd.", "8201 Fruitridge…
+$ city                         &lt;chr&gt; "Madison", "Sacramento", "Knightdale", "R…
+$ state                        &lt;chr&gt; "WI", "CA", "NC", "MD", "MD", "MI", "VA",…
+$ zip_code                     &lt;chr&gt; "53716", "95826", "27545", "21136", "2120…
+$ naics_code                   &lt;dbl&gt; 333911, 325611, 237110, 237110, 812220, 2…
+$ industry_description         &lt;chr&gt; "Centrifugal pumps manufacturing", "Glyce…
+$ annual_average_employees     &lt;dbl&gt; 275, 115, 138, 137, 478, 130, 200, 130, 1…
+$ total_hours_worked           &lt;dbl&gt; 505738, 258824, 311326, 306768, 994240, 1…
+$ no_injuries_illnesses        &lt;dbl&gt; 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1,…
+$ total_deaths                 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ total_dafw_cases             &lt;dbl&gt; 1, 1, 2, 0, 2, 0, 0, 3, 0, 0, 2, 1, 1, 2,…
+$ total_djtr_cases             &lt;dbl&gt; 0, 0, 1, 0, 3, 0, 2, 2, 0, 2, 0, 1, 0, 3,…
+$ total_other_cases            &lt;dbl&gt; 0, 1, 4, 4, 0, 0, 1, 3, 0, 0, 0, 1, 0, 7,…
+$ total_dafw_days              &lt;dbl&gt; 14, 80, 41, 0, 21, 0, 0, 51, 0, 0, 171, 1…
+$ total_djtr_days              &lt;dbl&gt; 0, 0, 127, 0, 10, 0, 17, 162, 0, 12, 0, 1…
+$ total_injuries               &lt;dbl&gt; 1, 2, 7, 4, 5, 0, 3, 8, 0, 2, 2, 3, 1, 12…
+$ total_poisonings             &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ total_respiratory_conditions &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ total_skin_disorders         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ total_hearing_loss           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ total_other_illnesses        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ establishment_id             &lt;dbl&gt; 626729, 406251, 296934, 296933, 687387, 6…
+$ establishment_type           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ size                         &lt;dbl&gt; 3, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 2, 3,…
+$ year_filing_for              &lt;dbl&gt; 2021, 2021, 2021, 2021, 2021, 2021, 2021,…
+$ created_timestamp            &lt;chr&gt; "1/1/2022 11:14:06", "1/1/2022 14:58:25",…
+$ change_reason                &lt;chr&gt; NA, NA, NA, NA, NA, NA, "Total hours were…</code></pre>
+</div>
+</div>
+</section>
+<section id="add_count-2" class="slide level2">
+<h2>add_count()</h2>
+<p>Normally:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>osha <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">mutate</span>(<span class="at">city=</span><span class="fu">str_to_title</span>(city)) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="fu">group_by</span>(city, state) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-4"><a href="#cb27-4"></a>  <span class="fu">summarize</span>(<span class="at">total=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-5"><a href="#cb27-5"></a>  <span class="fu">filter</span>(total<span class="sc">&gt;</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 72 × 3
+# Groups:   city [72]
+   city        state total
+   &lt;chr&gt;       &lt;chr&gt; &lt;int&gt;
+ 1 Albuquerque NM      140
+ 2 Atlanta     GA      333
+ 3 Austin      TX      285
+ 4 Bakersfield CA      134
+ 5 Baltimore   MD      181
+ 6 Baton Rouge LA      123
+ 7 Birmingham  AL      135
+ 8 Boston      MA      104
+ 9 Brooklyn    NY      138
+10 Charlotte   NC      332
+# … with 62 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="add_count-3" class="slide level2">
+<h2>add_count()</h2>
+<p>Normally:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>osha <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">mutate</span>(<span class="at">city=</span><span class="fu">str_to_title</span>(city)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">group_by</span>(city, state) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">summarize</span>(<span class="at">total=</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-5"><a href="#cb29-5"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-6"><a href="#cb29-6"></a>  <span class="fu">mutate</span>(<span class="at">state_count=</span><span class="fu">sum</span>(total)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-7"><a href="#cb29-7"></a>  <span class="fu">filter</span>(total<span class="sc">&gt;</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 72 × 4
+# Groups:   state [33]
+   city        state total state_count
+   &lt;chr&gt;       &lt;chr&gt; &lt;int&gt;       &lt;int&gt;
+ 1 Albuquerque NM      140         336
+ 2 Atlanta     GA      333        2744
+ 3 Austin      TX      285        6589
+ 4 Bakersfield CA      134        9164
+ 5 Baltimore   MD      181        1251
+ 6 Baton Rouge LA      123        1087
+ 7 Birmingham  AL      135        1289
+ 8 Boston      MA      104        1926
+ 9 Brooklyn    NY      138        3324
+10 Charlotte   NC      332        2831
+# … with 62 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="add_count-4" class="slide level2">
+<h2>add_count()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>osha <span class="sc">%&gt;%</span> </span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">mutate</span>(<span class="at">city=</span><span class="fu">str_to_title</span>(city)) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="fu">count</span>(city, state) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="fu">add_count</span>(state, <span class="at">wt=</span>n) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="fu">filter</span>(n<span class="sc">&gt;</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 72 × 4
+   city        state     n    nn
+   &lt;chr&gt;       &lt;chr&gt; &lt;int&gt; &lt;int&gt;
+ 1 Albuquerque NM      140   336
+ 2 Atlanta     GA      333  2744
+ 3 Austin      TX      285  6589
+ 4 Bakersfield CA      134  9164
+ 5 Baltimore   MD      181  1251
+ 6 Baton Rouge LA      123  1087
+ 7 Birmingham  AL      135  1289
+ 8 Boston      MA      104  1926
+ 9 Brooklyn    NY      138  3324
+10 Charlotte   NC      332  2831
+# … with 62 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="add_count-5" class="slide level2">
+<h2>add_count()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>osha <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">mutate</span>(<span class="at">city=</span><span class="fu">str_to_title</span>(city)) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">count</span>(city, state, <span class="at">name=</span><span class="st">"city_count"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">add_count</span>(state, <span class="at">wt=</span>city_count, <span class="at">name=</span><span class="st">"state_count"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5"></a>  <span class="fu">filter</span>(city_count<span class="sc">&gt;</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 72 × 4
+   city        state city_count state_count
+   &lt;chr&gt;       &lt;chr&gt;      &lt;int&gt;       &lt;int&gt;
+ 1 Albuquerque NM           140         336
+ 2 Atlanta     GA           333        2744
+ 3 Austin      TX           285        6589
+ 4 Bakersfield CA           134        9164
+ 5 Baltimore   MD           181        1251
+ 6 Baton Rouge LA           123        1087
+ 7 Birmingham  AL           135        1289
+ 8 Boston      MA           104        1926
+ 9 Brooklyn    NY           138        3324
+10 Charlotte   NC           332        2831
+# … with 62 more rows</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="str_pad-when-you-need-leading-zeroes" class="title-slide slide level1 center">
+<h1>4. str_pad() when you need leading zeroes</h1>
+
+</section>
+<section id="str_pad" class="slide level2">
+<h2>str_pad()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>poverty <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/poverty_original.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">mutate</span>(<span class="at">bad_fips=</span><span class="fu">as.numeric</span>(GEOID))</span>
+<span id="cb35-3"><a href="#cb35-3"></a></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="fu">glimpse</span>(poverty)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 28,989
+Columns: 6
+$ GEOID    &lt;chr&gt; "01001", "01001", "01001", "01001", "01001", "01001", "01001"…
+$ NAME     &lt;chr&gt; "Autauga County, Alabama", "Autauga County, Alabama", "Autaug…
+$ variable &lt;chr&gt; "population", "below50", "below125", "below150", "below185", …
+$ estimate &lt;dbl&gt; 55639, 3504, 10760, 12611, 15883, 17499, 27259, 35423, 42806,…
+$ moe      &lt;dbl&gt; NA, 858, 1288, 1349, 1480, 1541, 1453, 1418, 1258, NA, 1415, …
+$ bad_fips &lt;dbl&gt; 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1003, 1…</code></pre>
+</div>
+</div>
+</section>
+<section id="str_pad-1" class="slide level2">
+<h2>str_pad()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>poverty <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/poverty_original.csv"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2"></a>  <span class="fu">mutate</span>(<span class="at">bad_fips=</span><span class="fu">as.numeric</span>(GEOID)) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href="#cb37-3"></a>  <span class="fu">mutate</span>(<span class="at">good_fips=</span><span class="fu">str_pad</span>(bad_fips, <span class="dv">5</span>, <span class="at">side=</span><span class="st">"left"</span>, <span class="st">"0"</span>))</span>
+<span id="cb37-4"><a href="#cb37-4"></a></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="fu">glimpse</span>(poverty)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 28,989
+Columns: 7
+$ GEOID     &lt;chr&gt; "01001", "01001", "01001", "01001", "01001", "01001", "01001…
+$ NAME      &lt;chr&gt; "Autauga County, Alabama", "Autauga County, Alabama", "Autau…
+$ variable  &lt;chr&gt; "population", "below50", "below125", "below150", "below185",…
+$ estimate  &lt;dbl&gt; 55639, 3504, 10760, 12611, 15883, 17499, 27259, 35423, 42806…
+$ moe       &lt;dbl&gt; NA, 858, 1288, 1349, 1480, 1541, 1453, 1418, 1258, NA, 1415,…
+$ bad_fips  &lt;dbl&gt; 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1003, …
+$ good_fips &lt;chr&gt; "01001", "01001", "01001", "01001", "01001", "01001", "01001…</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="replace_na" class="title-slide slide level1 center">
+<h1>5. replace_na()</h1>
+
+</section>
+<section id="replace_na-1" class="slide level2">
+<h2>replace_na()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>transactions <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/transactions.csv"</span>)</span>
+<span id="cb39-2"><a href="#cb39-2"></a></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="fu">glimpse</span>(transactions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 657
+Columns: 22
+$ cmte_id         &lt;chr&gt; "C00725820", "C00725820", "C00749101", "C00448696", "C…
+$ amndt_ind       &lt;chr&gt; "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N",…
+$ rpt_tp          &lt;chr&gt; "30R", "30R", "30R", "M2", "M2", "M2", "M2", "M2", "M2…
+$ transaction_pgi &lt;chr&gt; "P2024", "P2024", "P2024", "P2024", "P2024", "P2024", …
+$ image_num       &lt;dbl&gt; 2.021020e+17, 2.021020e+17, 2.021020e+17, 2.021022e+17…
+$ transaction_tp  &lt;chr&gt; "24A", "24A", "24A", "24E", "24E", "24E", "24E", "24E"…
+$ entity_tp       &lt;chr&gt; "ORG", "ORG", "ORG", "ORG", "ORG", "ORG", "ORG", "ORG"…
+$ name            &lt;chr&gt; "SUMMIT STRATEGIC COMMUNICATIONS LLC", "SHUTTERSTOCK",…
+$ city            &lt;chr&gt; "PARK CITY", "NEW YORK", "BALA CYNWYD", "BOCA RATON", …
+$ state           &lt;chr&gt; "UT", "NY", "PA", "FL", "FL", "FL", "VA", "VA", "FL", …
+$ zip_code        &lt;chr&gt; "840987502", "101182100", "19004", "334871358", "33487…
+$ employer        &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ occupation      &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ transaction_dt  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ transaction_amt &lt;dbl&gt; 6585, 1937, 1088, 25750, 51500, 51500, 25900, 25900, 5…
+$ other_id        &lt;chr&gt; "S8MO00160", "S8MO00160", "S8MO00160", "S8MO00160", "S…
+$ cand_id         &lt;chr&gt; "S8MO00160", "S8MO00160", "S8MO00160", "S8MO00160", "S…
+$ tran_id         &lt;chr&gt; "500089221", "500089243", "SE.6413", "E1D4AFC8D0364442…
+$ file_num        &lt;dbl&gt; 1498464, 1498464, 1498608, 1501126, 1501126, 1501126, …
+$ memo_cd         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ memo_text       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ sub_id          &lt;dbl&gt; 4.02062e+18, 4.02062e+18, 4.02242e+18, 4.02232e+18, 4.…</code></pre>
+</div>
+</div>
+</section>
+<section id="replace_na-2" class="slide level2">
+<h2>replace_na()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>transactions <span class="ot">&lt;-</span> transactions <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">mutate</span>(<span class="at">employer =</span> <span class="fu">replace_na</span>(employer, <span class="dv">0</span>))</span>
+<span id="cb41-3"><a href="#cb41-3"></a></span>
+<span id="cb41-4"><a href="#cb41-4"></a><span class="fu">glimpse</span>(transactions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 657
+Columns: 22
+$ cmte_id         &lt;chr&gt; "C00725820", "C00725820", "C00749101", "C00448696", "C…
+$ amndt_ind       &lt;chr&gt; "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N",…
+$ rpt_tp          &lt;chr&gt; "30R", "30R", "30R", "M2", "M2", "M2", "M2", "M2", "M2…
+$ transaction_pgi &lt;chr&gt; "P2024", "P2024", "P2024", "P2024", "P2024", "P2024", …
+$ image_num       &lt;dbl&gt; 2.021020e+17, 2.021020e+17, 2.021020e+17, 2.021022e+17…
+$ transaction_tp  &lt;chr&gt; "24A", "24A", "24A", "24E", "24E", "24E", "24E", "24E"…
+$ entity_tp       &lt;chr&gt; "ORG", "ORG", "ORG", "ORG", "ORG", "ORG", "ORG", "ORG"…
+$ name            &lt;chr&gt; "SUMMIT STRATEGIC COMMUNICATIONS LLC", "SHUTTERSTOCK",…
+$ city            &lt;chr&gt; "PARK CITY", "NEW YORK", "BALA CYNWYD", "BOCA RATON", …
+$ state           &lt;chr&gt; "UT", "NY", "PA", "FL", "FL", "FL", "VA", "VA", "FL", …
+$ zip_code        &lt;chr&gt; "840987502", "101182100", "19004", "334871358", "33487…
+$ employer        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…
+$ occupation      &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ transaction_dt  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ transaction_amt &lt;dbl&gt; 6585, 1937, 1088, 25750, 51500, 51500, 25900, 25900, 5…
+$ other_id        &lt;chr&gt; "S8MO00160", "S8MO00160", "S8MO00160", "S8MO00160", "S…
+$ cand_id         &lt;chr&gt; "S8MO00160", "S8MO00160", "S8MO00160", "S8MO00160", "S…
+$ tran_id         &lt;chr&gt; "500089221", "500089243", "SE.6413", "E1D4AFC8D0364442…
+$ file_num        &lt;dbl&gt; 1498464, 1498464, 1498608, 1501126, 1501126, 1501126, …
+$ memo_cd         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ memo_text       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ sub_id          &lt;dbl&gt; 4.02062e+18, 4.02062e+18, 4.02242e+18, 4.02232e+18, 4.…</code></pre>
+</div>
+</div>
+</section>
+<section id="replace_na-3" class="slide level2">
+<h2>replace_na()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>transactions <span class="ot">&lt;-</span> transactions <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">mutate</span>(<span class="at">employer =</span> <span class="fu">replace_na</span>(employer, <span class="dv">0</span>),</span>
+<span id="cb43-3"><a href="#cb43-3"></a>         <span class="at">occupation =</span><span class="fu">replace_na</span>(occupation, <span class="dv">0</span>),</span>
+<span id="cb43-4"><a href="#cb43-4"></a>         <span class="at">memo_cd =</span> <span class="fu">replace_na</span>(memo_cd, <span class="st">""</span>))</span>
+<span id="cb43-5"><a href="#cb43-5"></a></span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="fu">glimpse</span>(transactions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 657
+Columns: 22
+$ cmte_id         &lt;chr&gt; "C00725820", "C00725820", "C00749101", "C00448696", "C…
+$ amndt_ind       &lt;chr&gt; "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N",…
+$ rpt_tp          &lt;chr&gt; "30R", "30R", "30R", "M2", "M2", "M2", "M2", "M2", "M2…
+$ transaction_pgi &lt;chr&gt; "P2024", "P2024", "P2024", "P2024", "P2024", "P2024", …
+$ image_num       &lt;dbl&gt; 2.021020e+17, 2.021020e+17, 2.021020e+17, 2.021022e+17…
+$ transaction_tp  &lt;chr&gt; "24A", "24A", "24A", "24E", "24E", "24E", "24E", "24E"…
+$ entity_tp       &lt;chr&gt; "ORG", "ORG", "ORG", "ORG", "ORG", "ORG", "ORG", "ORG"…
+$ name            &lt;chr&gt; "SUMMIT STRATEGIC COMMUNICATIONS LLC", "SHUTTERSTOCK",…
+$ city            &lt;chr&gt; "PARK CITY", "NEW YORK", "BALA CYNWYD", "BOCA RATON", …
+$ state           &lt;chr&gt; "UT", "NY", "PA", "FL", "FL", "FL", "VA", "VA", "FL", …
+$ zip_code        &lt;chr&gt; "840987502", "101182100", "19004", "334871358", "33487…
+$ employer        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…
+$ occupation      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…
+$ transaction_dt  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ transaction_amt &lt;dbl&gt; 6585, 1937, 1088, 25750, 51500, 51500, 25900, 25900, 5…
+$ other_id        &lt;chr&gt; "S8MO00160", "S8MO00160", "S8MO00160", "S8MO00160", "S…
+$ cand_id         &lt;chr&gt; "S8MO00160", "S8MO00160", "S8MO00160", "S8MO00160", "S…
+$ tran_id         &lt;chr&gt; "500089221", "500089243", "SE.6413", "E1D4AFC8D0364442…
+$ file_num        &lt;dbl&gt; 1498464, 1498464, 1498608, 1501126, 1501126, 1501126, …
+$ memo_cd         &lt;chr&gt; "", "", "", "", "", "", "", "", "", "", "", "", "", ""…
+$ memo_text       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+$ sub_id          &lt;dbl&gt; 4.02062e+18, 4.02062e+18, 4.02242e+18, 4.02232e+18, 4.…</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="lag" class="title-slide slide level1 center">
+<h1>6. lag</h1>
+
+</section>
+<section id="lag-1" class="slide level2">
+<h2>lag()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>disney <span class="sc">%&gt;%</span> </span>
+<span id="cb45-2"><a href="#cb45-2"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">year</span>(<span class="fu">mdy</span>(release_date))) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-3"><a href="#cb45-3"></a>  <span class="fu">count</span>(year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 54 × 2
+    year     n
+   &lt;dbl&gt; &lt;int&gt;
+ 1  1937     1
+ 2  1940     2
+ 3  1946     1
+ 4  1950     1
+ 5  1954     1
+ 6  1955     1
+ 7  1959     1
+ 8  1961     3
+ 9  1962     1
+10  1963     1
+# … with 44 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="lag-2" class="slide level2">
+<h2>lag()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>disney <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="#cb47-2"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">year</span>(<span class="fu">mdy</span>(release_date))) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-3"><a href="#cb47-3"></a>  <span class="fu">count</span>(<span class="at">decade =</span> <span class="dv">10</span> <span class="sc">*</span> (year <span class="sc">%/%</span> <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-4"><a href="#cb47-4"></a>  <span class="fu">mutate</span>(<span class="at">prior_decade=</span><span class="fu">lag</span>(n, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+  decade     n prior_decade
+   &lt;dbl&gt; &lt;int&gt;        &lt;int&gt;
+1   1930     1           NA
+2   1940     3            1
+3   1950     4            3
+4   1960     7            4
+5   1970     9            7
+6   1980    61            9
+7   1990   236           61
+8   2000   172          236
+9   2010    86          172</code></pre>
+</div>
+</div>
+</section>
+<section id="lag-3" class="slide level2">
+<h2>lag()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1"></a>disney <span class="sc">%&gt;%</span> </span>
+<span id="cb49-2"><a href="#cb49-2"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">year</span>(<span class="fu">mdy</span>(release_date))) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-3"><a href="#cb49-3"></a>  <span class="fu">count</span>(<span class="at">decade =</span> <span class="dv">10</span> <span class="sc">*</span> (year <span class="sc">%/%</span> <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-4"><a href="#cb49-4"></a>  <span class="fu">mutate</span>(<span class="at">prior_decade=</span><span class="fu">lag</span>(n, <span class="dv">1</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb49-5"><a href="#cb49-5"></a>  <span class="fu">mutate</span>(<span class="at">change=</span><span class="fu">round</span>(n<span class="sc">-</span>prior_decade)<span class="sc">/</span>prior_decade<span class="sc">*</span><span class="dv">100</span>,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 5
+  decade     n prior_decade change   `1`
+   &lt;dbl&gt; &lt;int&gt;        &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1   1930     1           NA   NA       1
+2   1940     3            1  200       1
+3   1950     4            3   33.3     1
+4   1960     7            4   75       1
+5   1970     9            7   28.6     1
+6   1980    61            9  578.      1
+7   1990   236           61  287.      1
+8   2000   172          236  -27.1     1
+9   2010    86          172  -50       1</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="crossing" class="title-slide slide level1 center">
+<h1>7. crossing()</h1>
+
+</section>
+<section id="making-a-dummy-set-with-crossing" class="slide level2">
+<h2>Making a dummy set with crossing()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>dummy_df <span class="ot">&lt;-</span> <span class="fu">crossing</span>(<span class="at">month=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb51-2"><a href="#cb51-2"></a>                     <span class="at">year=</span><span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>)</span>
+<span id="cb51-3"><a href="#cb51-3"></a></span>
+<span id="cb51-4"><a href="#cb51-4"></a>dummy_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 48 × 2
+   month  year
+   &lt;int&gt; &lt;int&gt;
+ 1     1  2019
+ 2     1  2020
+ 3     1  2021
+ 4     1  2022
+ 5     2  2019
+ 6     2  2020
+ 7     2  2021
+ 8     2  2022
+ 9     3  2019
+10     3  2020
+# … with 38 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="making-a-dummy-set-with-crossing-1" class="slide level2">
+<h2>Making a dummy set with crossing()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>state.abb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "AL" "AK" "AZ" "AR" "CA" "CO" "CT" "DE" "FL" "GA" "HI" "ID" "IL" "IN" "IA"
+[16] "KS" "KY" "LA" "ME" "MD" "MA" "MI" "MN" "MS" "MO" "MT" "NE" "NV" "NH" "NJ"
+[31] "NM" "NY" "NC" "ND" "OH" "OK" "OR" "PA" "RI" "SC" "SD" "TN" "TX" "UT" "VT"
+[46] "VA" "WA" "WV" "WI" "WY"</code></pre>
+</div>
+</div>
+</section>
+<section id="making-a-dummy-set-with-crossing-2" class="slide level2">
+<h2>Making a dummy set with crossing()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>dummy_df <span class="ot">&lt;-</span> <span class="fu">crossing</span>(<span class="at">month=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb55-2"><a href="#cb55-2"></a>                     <span class="at">year=</span><span class="dv">2019</span><span class="sc">:</span><span class="dv">2022</span>,</span>
+<span id="cb55-3"><a href="#cb55-3"></a>                     <span class="at">state=</span>state.abb)</span>
+<span id="cb55-4"><a href="#cb55-4"></a></span>
+<span id="cb55-5"><a href="#cb55-5"></a>dummy_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,400 × 3
+   month  year state
+   &lt;int&gt; &lt;int&gt; &lt;chr&gt;
+ 1     1  2019 AK   
+ 2     1  2019 AL   
+ 3     1  2019 AR   
+ 4     1  2019 AZ   
+ 5     1  2019 CA   
+ 6     1  2019 CO   
+ 7     1  2019 CT   
+ 8     1  2019 DE   
+ 9     1  2019 FL   
+10     1  2019 GA   
+# … with 2,390 more rows</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="separate" class="title-slide slide level1 center">
+<h1>8. separate()</h1>
+
+</section>
+<section id="separate-1" class="slide level2">
+<h2>separate()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>candidates <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/candidates.csv"</span>)</span>
+<span id="cb57-2"><a href="#cb57-2"></a></span>
+<span id="cb57-3"><a href="#cb57-3"></a><span class="fu">glimpse</span>(candidates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 5,123
+Columns: 15
+$ cand_id     &lt;chr&gt; "H0AL01055", "H0AL02202", "H0AL05163", "H0AL07086", "H0AR0…
+$ cand_name   &lt;chr&gt; "CARL, JERRY LEE, JR", "HARVEY-HALL, PHYLLIS", "BROOKS, MO…
+$ party       &lt;chr&gt; "REP", "DEM", "REP", "DEM", "REP", "REP", "REP", "REP", "D…
+$ election_yr &lt;dbl&gt; 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022…
+$ office_st   &lt;chr&gt; "AL", "AL", "AL", "AL", "AR", "AR", "AZ", "AZ", "AZ", "AZ"…
+$ office      &lt;chr&gt; "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H"…
+$ district    &lt;chr&gt; "01", "02", "05", "07", "01", "03", "09", "03", "05", "01"…
+$ ici         &lt;chr&gt; "I", "C", "I", "I", "I", "I", "I", "C", "C", "C", "C", "I"…
+$ status      &lt;chr&gt; "C", "C", "F", "C", "C", "C", "C", "N", "N", "C", "C", "C"…
+$ pcc         &lt;chr&gt; "C00697789", "C00728873", "C00464149", "C00458976", "C0046…
+$ st1         &lt;chr&gt; "PO BOX 852138", "P.O. BOX 11564", "7610 FOXFIRE DR.", "PO…
+$ st2         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, "SUITE 130", NA, NA, N…
+$ city        &lt;chr&gt; "MOBILE", "MONTGOMERY", "HUNTSVILLE", "BIRMINGHAM", "JONES…
+$ st          &lt;chr&gt; "AL", "AL", "AL", "AL", "AR", "AR", "AZ", "AZ", "AZ", "AZ"…
+$ zip         &lt;chr&gt; "36685", "36111", "35802", "35201", "72404", "727563078", …</code></pre>
+</div>
+</div>
+</section>
+<section id="separate-2" class="slide level2">
+<h2>separate()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>candidates_new <span class="ot">&lt;-</span> candidates <span class="sc">%&gt;%</span> </span>
+<span id="cb59-2"><a href="#cb59-2"></a>  <span class="fu">mutate</span>(<span class="at">cand_original=</span>cand_name) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-3"><a href="#cb59-3"></a>  <span class="fu">separate</span>(cand_name, <span class="at">sep=</span><span class="st">", "</span>, <span class="at">into=</span><span class="fu">c</span>(<span class="st">"last"</span>, <span class="st">"first"</span>))</span>
+<span id="cb59-4"><a href="#cb59-4"></a></span>
+<span id="cb59-5"><a href="#cb59-5"></a><span class="fu">glimpse</span>(candidates_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 5,123
+Columns: 17
+$ cand_id       &lt;chr&gt; "H0AL01055", "H0AL02202", "H0AL05163", "H0AL07086", "H0A…
+$ last          &lt;chr&gt; "CARL", "HARVEY-HALL", "BROOKS", "SEWELL", "CRAWFORD", "…
+$ first         &lt;chr&gt; "JERRY LEE", "PHYLLIS", "MO", "TERRI A.", "ERIC ALAN RIC…
+$ party         &lt;chr&gt; "REP", "DEM", "REP", "DEM", "REP", "REP", "REP", "REP", …
+$ election_yr   &lt;dbl&gt; 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 2022, 20…
+$ office_st     &lt;chr&gt; "AL", "AL", "AL", "AL", "AR", "AR", "AZ", "AZ", "AZ", "A…
+$ office        &lt;chr&gt; "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "…
+$ district      &lt;chr&gt; "01", "02", "05", "07", "01", "03", "09", "03", "05", "0…
+$ ici           &lt;chr&gt; "I", "C", "I", "I", "I", "I", "I", "C", "C", "C", "C", "…
+$ status        &lt;chr&gt; "C", "C", "F", "C", "C", "C", "C", "N", "N", "C", "C", "…
+$ pcc           &lt;chr&gt; "C00697789", "C00728873", "C00464149", "C00458976", "C00…
+$ st1           &lt;chr&gt; "PO BOX 852138", "P.O. BOX 11564", "7610 FOXFIRE DR.", "…
+$ st2           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, "SUITE 130", NA, NA,…
+$ city          &lt;chr&gt; "MOBILE", "MONTGOMERY", "HUNTSVILLE", "BIRMINGHAM", "JON…
+$ st            &lt;chr&gt; "AL", "AL", "AL", "AL", "AR", "AR", "AZ", "AZ", "AZ", "A…
+$ zip           &lt;chr&gt; "36685", "36111", "35802", "35201", "72404", "727563078"…
+$ cand_original &lt;chr&gt; "CARL, JERRY LEE, JR", "HARVEY-HALL, PHYLLIS", "BROOKS, …</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="collapse" class="title-slide slide level1 center">
+<h1>9. collapse</h1>
+
+</section>
+<section id="collapse-in-paste0" class="slide level2">
+<h2>collapse in paste0()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>sal <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/Salaries.xlsx"</span>, <span class="at">sheet=</span><span class="dv">1</span>)</span>
+<span id="cb61-2"><a href="#cb61-2"></a></span>
+<span id="cb61-3"><a href="#cb61-3"></a><span class="fu">glimpse</span>(sal)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,200
+Columns: 8
+$ last_name       &lt;chr&gt; "Carpenter", "Clendening", "Colford", "Cook", "Dunham"…
+$ first_name      &lt;chr&gt; "Danyale", "Jennifer", "Micayla", "Shelley", "Emily", …
+$ department      &lt;chr&gt; "Animal Care &amp; Control", "Animal Care &amp; Control", "Ani…
+$ job_title       &lt;chr&gt; "Administrative Assistant", "Administrative Assistant"…
+$ total_comp      &lt;dbl&gt; 28465.39, 25120.19, 605.76, 40206.98, 12311.88, 39978.…
+$ overtime_oncall &lt;dbl&gt; 101.75, NA, NA, 1622.38, NA, 329.44, 7348.78, NA, NA, …
+$ hourly_rate     &lt;dbl&gt; 19.38, 17.24, 13.29, 20.06, 13.29, 20.59, 20.51, NA, N…
+$ salary_2021     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, 37176.30, 49294.45, NA, NA…</code></pre>
+</div>
+</div>
+</section>
+<section id="collapse-in-paste0-1" class="slide level2">
+<h2>collapse in paste0()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>sal <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(department) <span class="sc">%&gt;%</span></span>
+<span id="cb63-2"><a href="#cb63-2"></a>  <span class="fu">summarize</span>(<span class="at">total_budget=</span><span class="fu">sum</span>(total_comp, <span class="at">na.rm=</span>T),</span>
+<span id="cb63-3"><a href="#cb63-3"></a>            <span class="at">titles=</span><span class="fu">paste0</span>(job_title, <span class="at">collapse=</span><span class="st">", "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 39 × 3
+   department                         total_budget titles                       
+   &lt;chr&gt;                                     &lt;dbl&gt; &lt;chr&gt;                        
+ 1 Animal Care &amp; Control                   847722. Administrative Assistant, Ad…
+ 2 Board of Public Safety                    2352. Board Member, Board Member, …
+ 3 CFRD                                    405009. Director, After Hours Ambass…
+ 4 Clerk's Office                          156848. Intern, City Clerk, Intern, …
+ 5 Controller's Office                     663937. Accounts Payable/Revenue Cle…
+ 6 Council Office                          330877. Assistant Administrator/Lega…
+ 7 Economic &amp; Sustainable Development      338964. Local Food System Specialist…
+ 8 Engineering                             554237. Senior Project Manager, City…
+ 9 Facilities Maintenance                  184011. Director, Maintenance/Custod…
+10 Fire                                   6775018. FF1, Captain, FF1, Chauffeur…
+# … with 29 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="collapse-in-paste0-2" class="slide level2">
+<h2>collapse in paste0()</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>sal <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(department) <span class="sc">%&gt;%</span></span>
+<span id="cb65-2"><a href="#cb65-2"></a>  <span class="fu">summarize</span>(<span class="at">total_budget=</span><span class="fu">sum</span>(total_comp, <span class="at">na.rm=</span>T),</span>
+<span id="cb65-3"><a href="#cb65-3"></a>            <span class="at">titles=</span><span class="fu">paste0</span>(<span class="fu">unique</span>(job_title), <span class="at">collapse=</span><span class="st">", "</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 39 × 3
+   department                         total_budget titles                       
+   &lt;chr&gt;                                     &lt;dbl&gt; &lt;chr&gt;                        
+ 1 Animal Care &amp; Control                   847722. Administrative Assistant, Sp…
+ 2 Board of Public Safety                    2352. Board Member                 
+ 3 CFRD                                    405009. Director, After Hours Ambass…
+ 4 Clerk's Office                          156848. Intern, City Clerk, Chief De…
+ 5 Controller's Office                     663937. Accounts Payable/Revenue Cle…
+ 6 Council Office                          330877. Assistant Administrator/Lega…
+ 7 Economic &amp; Sustainable Development      338964. Local Food System Specialist…
+ 8 Engineering                             554237. Senior Project Manager, City…
+ 9 Facilities Maintenance                  184011. Director, Maintenance/Custod…
+10 Fire                                   6775018. FF1, Captain, Chauffeur, Pro…
+# … with 29 more rows</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="tidylog" class="title-slide slide level1 center">
+<h1>10. tidylog</h1>
+
+</section>
+<section id="tidylog-1" class="slide level2">
+<h2>tidylog</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a><span class="fu">library</span>(tidylog)</span>
+<span id="cb67-2"><a href="#cb67-2"></a></span>
+<span id="cb67-3"><a href="#cb67-3"></a>transactions <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/transactions.csv"</span>, <span class="at">col_types=</span><span class="st">"ccccccccccccccTnccccccc"</span>)</span>
+<span id="cb67-4"><a href="#cb67-4"></a>candidates <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/candidates.csv"</span>, <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">.default =</span> <span class="st">"c"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tidylog-2" class="slide level2">
+<h2>tidylog</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1"></a><span class="fu">inner_join</span>(transactions, candidates, <span class="at">by =</span> <span class="st">"cand_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 649 × 36
+   cmte_id   amndt_ind rpt_tp trans…¹ image…² trans…³ entit…⁴ name  city.x state
+   &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+ 1 C00725820 N         30R    P2024   202102… 24A     ORG     SUMM… PARK … UT   
+ 2 C00725820 N         30R    P2024   202102… 24A     ORG     SHUT… NEW Y… NY   
+ 3 C00749101 N         30R    P2024   202102… 24A     ORG     GRAS… BALA … PA   
+ 4 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+ 5 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+ 6 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+ 7 C00448696 N         M2     P2024   202102… 24E     ORG     RIGH… ALEXA… VA   
+ 8 C00448696 N         M2     P2024   202102… 24E     ORG     RIGH… ALEXA… VA   
+ 9 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+10 C00448696 N         M2     P2024   202102… 24E     PAC     SENA… WASHI… DC   
+# … with 639 more rows, 26 more variables: zip_code &lt;chr&gt;, employer &lt;chr&gt;,
+#   occupation &lt;chr&gt;, transaction_dt &lt;chr&gt;, transaction_amt &lt;dttm&gt;,
+#   other_id &lt;dbl&gt;, cand_id &lt;chr&gt;, tran_id &lt;chr&gt;, file_num &lt;chr&gt;,
+#   memo_cd &lt;chr&gt;, memo_text &lt;chr&gt;, sub_id &lt;chr&gt;, cand_name &lt;chr&gt;, party &lt;chr&gt;,
+#   election_yr &lt;chr&gt;, office_st &lt;chr&gt;, office &lt;chr&gt;, district &lt;chr&gt;,
+#   ici &lt;chr&gt;, status &lt;chr&gt;, pcc &lt;chr&gt;, st1 &lt;chr&gt;, st2 &lt;chr&gt;, city.y &lt;chr&gt;,
+#   st &lt;chr&gt;, zip &lt;chr&gt;, and abbreviated variable names ¹​transaction_pgi, …</code></pre>
+</div>
+</div>
+</section>
+<section id="tidylog-3" class="slide level2">
+<h2>tidylog</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1"></a><span class="fu">left_join</span>(transactions, candidates, <span class="at">by =</span> <span class="st">"cand_id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 657 × 36
+   cmte_id   amndt_ind rpt_tp trans…¹ image…² trans…³ entit…⁴ name  city.x state
+   &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;
+ 1 C00725820 N         30R    P2024   202102… 24A     ORG     SUMM… PARK … UT   
+ 2 C00725820 N         30R    P2024   202102… 24A     ORG     SHUT… NEW Y… NY   
+ 3 C00749101 N         30R    P2024   202102… 24A     ORG     GRAS… BALA … PA   
+ 4 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+ 5 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+ 6 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+ 7 C00448696 N         M2     P2024   202102… 24E     ORG     RIGH… ALEXA… VA   
+ 8 C00448696 N         M2     P2024   202102… 24E     ORG     RIGH… ALEXA… VA   
+ 9 C00448696 N         M2     P2024   202102… 24E     ORG     ALLI… BOCA … FL   
+10 C00448696 N         M2     P2024   202102… 24E     PAC     SENA… WASHI… DC   
+# … with 647 more rows, 26 more variables: zip_code &lt;chr&gt;, employer &lt;chr&gt;,
+#   occupation &lt;chr&gt;, transaction_dt &lt;chr&gt;, transaction_amt &lt;dttm&gt;,
+#   other_id &lt;dbl&gt;, cand_id &lt;chr&gt;, tran_id &lt;chr&gt;, file_num &lt;chr&gt;,
+#   memo_cd &lt;chr&gt;, memo_text &lt;chr&gt;, sub_id &lt;chr&gt;, cand_name &lt;chr&gt;, party &lt;chr&gt;,
+#   election_yr &lt;chr&gt;, office_st &lt;chr&gt;, office &lt;chr&gt;, district &lt;chr&gt;,
+#   ici &lt;chr&gt;, status &lt;chr&gt;, pcc &lt;chr&gt;, st1 &lt;chr&gt;, st2 &lt;chr&gt;, city.y &lt;chr&gt;,
+#   st &lt;chr&gt;, zip &lt;chr&gt;, and abbreviated variable names ¹​transaction_pgi, …</code></pre>
+</div>
+</div>
 <div class="footer footer-default">
 
 </div>
-</section>
+</section></section>
     </div>
   </div>
 
@@ -549,6 +1565,48 @@
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          // dispatch for htmlwidgets
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for reveal
+        if (window.Reveal) {
+          window.Reveal.addEventListener("slidechanged", function(event) {
+            fireSlideChanged(event.previousSlide, event.currentSlide);
+          });
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

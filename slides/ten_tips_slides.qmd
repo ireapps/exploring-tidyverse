@@ -1,8 +1,14 @@
 ---
-title: "Ten tricks in the tidyverse"
+title: "Tidyverse functions that make wrangling data easier"
 format: revealjs
 editor: visual
 ---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(readxl)
+```
 
 ## Counting and summarizing
 
@@ -12,6 +18,388 @@ editor: visual
 
 3. `add_count()`
 
-4. `summarize()` w/ a list count
+## Wrangling data 
 
+4. `str_pad()`
+
+5. `replace_na()`
+
+6. `lag()`
+
+## tidy data
+
+7. `crossing()`
+
+8. `separate()`
+
+9. **collapse**
+
+10. **tidylog**
+
+So much of data science is counting, and sometimes dividing
+
+# 1. `count()`
+
+## Regular summarizing 
+
+:::: {.columns}
+
+::: {.column width="60%"}
+```{r mlb, echo=T}
+mlb <- read_csv("data/mlb.csv")
+glimpse(mlb)
+```
+:::
+
+::: {.column width="40%"}
+```{r, echo=T}
+mlb %>% 
+  group_by(team) %>% 
+  summarize(total=n())
+```
+:::
+
+::::
+
+## Using count()
+
+:::: {.columns}
+
+::: {.column width="60%"}
+```{r mlb2, echo=T}
+mlb <- read_csv("data/mlb.csv")
+glimpse(mlb)
+```
+:::
+
+::: {.column width="40%"}
+```{r, echo=T}
+mlb %>% 
+  count(team)
+```
+:::
+
+::::
+
+## Using count() and names
+
+:::: {.columns}
+
+::: {.column width="60%"}
+```{r mlb3, echo=T}
+mlb <- read_csv("data/mlb.csv")
+glimpse(mlb)
+```
+:::
+
+::: {.column width="40%"}
+```{r, echo=T}
+mlb %>% 
+  count(team, 
+        name="total")
+```
+:::
+
+::::
+
+
+## Using count() and more
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r mlb4, echo=T}
+mlb <- read_csv("data/mlb.csv")
+glimpse(mlb)
+```
+:::
+
+::: {.column width="50%"}
+```{r, echo=T}
+mlb %>% 
+  count(team, 
+        sort=TRUE,
+        wt=salary,
+        name="total_salary")
+```
+:::
+
+::::
+
+# 2. Creating new variables in a `group_by()` or `count()`
+
+## Bring in Disney data
+
+```{r echo=T}
+disney <- read_csv("data/disney_movies_total_gross.csv")
+
+glimpse(disney)
+```
+
+## count() again
+
+```{r, echo=T}
+disney %>% 
+  mutate(year=year(mdy(release_date))) %>% 
+  count(year)
+```
+
+
+## count() again but better
+
+```{r, echo=T}
+disney %>% 
+  mutate(year=year(mdy(release_date))) %>% 
+  count(decade = 10 * (year %/% 10))
+```
+
+## excellent for quicker viz
+
+```{r, echo=T}
+disney %>% 
+  mutate(year=year(mdy(release_date))) %>% 
+  count(year) %>% 
+  ggplot(aes(x=year, y=n)) +
+  geom_col() 
+```
+## excellent for quicker viz
+
+```{r, echo=T}
+disney %>% 
+  mutate(year=year(mdy(release_date))) %>% 
+  count(decade = 10 * (year %/% 10)) %>% 
+  ggplot(aes(x=decade, y=n)) +
+  geom_col() 
+```
+
+
+# 3.add_count()
+
+## add_count()
+
+```{r, echo=T}
+osha <- read_csv("data/osha.csv")
+
+glimpse(osha)
+```
+
+## add_count()
+
+Normally:
+
+```{r, echo=T}
+osha %>% 
+  mutate(city=str_to_title(city)) %>% 
+  group_by(city, state) %>% 
+  summarize(total=n()) %>% 
+  filter(total>100)
+```
+
+## add_count()
+
+Normally:
+
+```{r, echo=T}
+osha %>% 
+  mutate(city=str_to_title(city)) %>% 
+  group_by(city, state) %>% 
+  summarize(total=n()) %>% 
+  group_by(state) %>% 
+  mutate(state_count=sum(total)) %>% 
+  filter(total>100)
+```
+
+## add_count() 
+
+```{r echo=T}
+osha %>% 
+  mutate(city=str_to_title(city)) %>% 
+  count(city, state) %>% 
+  add_count(state, wt=n) %>% 
+  filter(n>100)
+```
+
+## add_count() 
+
+```{r echo=T}
+osha %>% 
+  mutate(city=str_to_title(city)) %>% 
+  count(city, state, name="city_count") %>% 
+  add_count(state, wt=city_count, name="state_count") %>% 
+  filter(city_count>100)
+```
+
+# 4. str_pad() when you need leading zeroes
+
+## str_pad()
+
+```{r echo=T}
+poverty <- read_csv("data/poverty_original.csv") %>% 
+  mutate(bad_fips=as.numeric(GEOID))
+
+glimpse(poverty)
+```
+## str_pad() 
+
+```{r echo=T}
+poverty <- read_csv("data/poverty_original.csv") %>% 
+  mutate(bad_fips=as.numeric(GEOID)) %>% 
+  mutate(good_fips=str_pad(bad_fips, 5, side="left", "0"))
+
+glimpse(poverty)
+```
+# 5. replace_na()
+
+## replace_na()
+
+```{r echo=T}
+transactions <- read_csv("data/transactions.csv")
+
+glimpse(transactions)
+```
+
+## replace_na()
+
+```{r  echo=T}
+transactions <- transactions %>% 
+  mutate(employer = replace_na(employer, 0))
+
+glimpse(transactions)
+```
+
+## replace_na()
+
+```{r echo=T}
+transactions <- transactions %>% 
+  mutate(employer = replace_na(employer, 0),
+         occupation =replace_na(occupation, 0),
+         memo_cd = replace_na(memo_cd, ""))
+
+glimpse(transactions)
+```
+
+# 6. lag
+
+## lag()
+
+```{r echo=T}
+disney %>% 
+  mutate(year=year(mdy(release_date))) %>% 
+  count(year)
+```
+
+## lag()
+
+```{r echo=T}
+disney %>% 
+  mutate(year=year(mdy(release_date))) %>% 
+  count(decade = 10 * (year %/% 10)) %>% 
+  mutate(prior_decade=lag(n, 1))
+```
+
+## lag()
+
+```{r echo=T}
+disney %>% 
+  mutate(year=year(mdy(release_date))) %>% 
+  count(decade = 10 * (year %/% 10)) %>% 
+  mutate(prior_decade=lag(n, 1)) %>% 
+  mutate(change=round(n-prior_decade)/prior_decade*100,1)
+```
+
+# 7. crossing()
+
+## Making a dummy set with crossing()
+
+```{r echo=T}
+dummy_df <- crossing(month=1:12,
+                     year=2019:2022)
+
+dummy_df
+```
+
+## Making a dummy set with crossing()
+
+```{r echo=T}
+state.abb
+```
+
+## Making a dummy set with crossing()
+
+```{r echo=T}
+dummy_df <- crossing(month=1:12,
+                     year=2019:2022,
+                     state=state.abb)
+
+dummy_df
+```
+
+# 8. separate()
+
+## separate()
+
+```{r echo=T}
+candidates <- read_csv("data/candidates.csv")
+
+glimpse(candidates)
+```
+
+## separate()
+
+```{r echo=T}
+candidates_new <- candidates %>% 
+  mutate(cand_original=cand_name) %>% 
+  separate(cand_name, sep=", ", into=c("last", "first"))
+
+glimpse(candidates_new)
+```
+
+# 9. collapse
+
+## collapse in paste0()
+
+```{r echo=TRUE}
+sal <- read_excel("data/Salaries.xlsx", sheet=1)
+
+glimpse(sal)
+```
+
+## collapse in paste0()
+
+```{r echo = TRUE}
+sal %>% group_by(department) %>%
+  summarize(total_budget=sum(total_comp, na.rm=T),
+            titles=paste0(job_title, collapse=", "))
+```
+
+## collapse in paste0()
+
+```{r echo=TRUE}
+sal %>% group_by(department) %>%
+  summarize(total_budget=sum(total_comp, na.rm=T),
+            titles=paste0(unique(job_title), collapse=", "))
+```
+
+# 10. tidylog
+
+## tidylog
+
+```{r echo=TRUE}
+library(tidylog)
+
+transactions <- read_csv("data/transactions.csv", col_types="ccccccccccccccTnccccccc")
+candidates <- read_csv("data/candidates.csv", col_types = cols(.default = "c"))
+```
+
+## tidylog
+
+```{r echo=TRUE}
+inner_join(transactions, candidates, by = "cand_id")
+```
+
+## tidylog
+
+```{r echo=T}
+left_join(transactions, candidates, by = "cand_id")
+```
 
