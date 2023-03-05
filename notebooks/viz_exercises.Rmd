@@ -123,7 +123,7 @@ We sequentially add layers onto the foundational `ggplot()` plot to create compl
 
 
 ```{r img4a, echo = F, out.width="50%", fig.align="center"}
-include_graphics("slides/images/ggplot4a.png")
+include_graphics("images/ggplot4a.png")
 ``` 
 
 Scales change the properties of the variable mapping.
