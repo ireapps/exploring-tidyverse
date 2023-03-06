@@ -25,9 +25,9 @@ We'll put these functions into practice using the poverty data and salaries data
 
 ```{r}
 # complete these lines to import poverty.csv, salaries.xlsx, and osha.csv from your data folder: 
-poverty <- 
-salaries <- 
-osha <- 
+poverty <- read_csv("data/poverty.csv")
+salaries <- read_excel("data/Salaries.xlsx", sheet=1)
+osha <- read_csv("data/osha.csv")
   
 # FEC campaign finance
 # Note we're forcing data types on these tables: 
@@ -58,7 +58,8 @@ poverty %>% filter(state=="California" & population > 1000000)
 👉 YOUR TURN
 Locate your state and county in this data: how many people live below 200% of the poverty level?
 ```{r}
-
+poverty %>% filter(state=="Missouri" & county=="Boone County")
+# in Boone County it's 57,430
 ```
 
 Look at a tri-state area using OR, two ways: 
@@ -84,7 +85,7 @@ osha %>% filter(grepl("fish",industry_description, ignore.case=T))
 👉 YOUR TURN
 Find all the records for businesses where the industry is related to farming: 
 ```{r}
-
+osha %>% filter(grepl("farm",industry_description, ignore.case=T))
 ```
 
 The `grepl()` function is in a family of `grep` functions that allow you to search for strings (as above) or patters. In order to search for patterns you need to learn "regular expressions", which is a whole other class. But you can use `grep()` and `grepl()` to search for keywords in a text column. `grepl()` returns TRUE or FALSE depending on whether the text matches, and `grep()` returns an index of the values that match:
@@ -143,7 +144,11 @@ osha %>% arrange(state, desc(no_injuries_illnesses))
 👉 YOUR TURN
 Find the establishment in your state with the most deaths: 
 ```{r}
+osha %>% 
+  filter(state=="MO") %>% 
+  arrange(desc(total_deaths))
 
+# six establishments had 1 death
 ```
 
 ### summarise()
@@ -164,7 +169,12 @@ poverty %>% summarise(total_pop = sum(population))
 👉YOUR TURN
 Sum up the population that is below 200% of the poverty level: 
 ```{r}
+poverty %>% summarise(pop_below200 = sum(below200))
 
+# 97,225,877
+
+97225877/329824950
+# 29% of the population
 ```
 
 Within `summarise()` you can apply any number of summary functions. Here's a few: `mean()`, `median()`, `min()`, `max()`, `range()`, `n()`
@@ -177,7 +187,11 @@ poverty %>% summarise(avg_pop = mean(population))
 👉 YOUR TURN
 What is the total population for your state? 
 ```{r}
+poverty %>% 
+  filter(state=="Missouri") %>% 
+  summarise(total_pop = sum(population))
 
+# 6,124,160 people live in Missouri
 ```
 
 The `n()` function counts rows or observations. One row in the poverty data is one county, so to see how many counties are in a state (such as California), use `n()`.
@@ -214,13 +228,20 @@ Take a look at the `salaries` dataset.
 👉YOUR TURN
 What is the total amount paid out? (Hint: use total_comp)
 ```{r}
+salaries %>% summarise(total = sum(total_comp))
 
+# $40,407,880
 ```
 
 👉YOUR TURN 
 Which department pays out the most? 
 ```{r}
+salaries %>% 
+  group_by(department) %>% 
+  summarise(total = sum(total_comp)) %>% 
+  arrange(desc(total))
 
+# Police, by > $2M. Fire is second. 
 ```
 
 What is the total overtime paid out by the city in 2021? Notice that there NAs in overtime. If you don't exclude them, R will just return an NA on any summary function you run. Use the `na.rm=TRUE` argument to exclude NAs. You can also write `na.rm=T`:
@@ -252,7 +273,12 @@ salaries %>%
 👉YOUR TURN 
 Which departments pay out the most in overtime?
 ```{r}
+salaries %>% 
+  group_by(department) %>% 
+  summarise(OT = sum(overtime_oncall, na.rm=TRUE)) %>% 
+  arrange(desc(OT))
 
+# Police, with $746,006, 2.5 times more than Fire. 
 ```
 
 ### count()
@@ -320,6 +346,11 @@ anti_join(transactions, candidates, by = "cand_id") %>%
 👉YOUR TURN
 Join `transactions` and `candidates` and find out which candidate had the most money spent on them: 
 ```{r}
-
+left_join(transactions, candidates, by = "cand_id") %>% 
+  group_by(cand_name) %>% 
+  summarise(total = sum(transaction_amt)) %>% 
+  arrange(desc(total))
+  
+# Eric Greitens. 
 ```
 

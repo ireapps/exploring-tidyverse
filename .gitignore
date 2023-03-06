@@ -1,9 +1,6 @@
 # Annoying DS Store files
 .DS_Store
 
-# Liz's finished notebooks
-nb-finished/
-
 # History files
 .Rhistory
 .Rapp.history
